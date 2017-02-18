@@ -20,7 +20,7 @@ class Card {
 }
 
 /**
- * Defines a suit.
+ * Defines a suit and returns an array of 13 cards Ace through King in given suit.
  * @constructor
  * @param {string} suit - The name of the suit.
  */
@@ -50,7 +50,19 @@ class Suit {
 
 
 /**
- * Starting a new game.
+ * Create the deck out of 4 suits of 13 cards each.
+ */
+let deck = () => {
+    let newDeck = [];
+    let hearts = Suit.suit("hearts");
+    let diamonds = Suit.suit("diamonds");
+    let clubs = Suit.suit("clubs");
+    let spades = Suit.suit("spades");
+    return newDeck.concat(hearts, diamonds, clubs, spades);
+};
+
+/**
+ * Announce starting a new game.
  * @param {number} numberOfPlayers - The number of players playing this game.
  */
 
@@ -58,16 +70,20 @@ let startGame = (numberOfPlayers) => {
     return `Playing a game of Blackjack with ${numberOfPlayers} players!`;
 };
 
-
-
-
 /**
  * Shuffle a deck of cards.
- * @param {Object} deck - Returns a list of 52 cards of 4 suits in a random order.
+ * @param {array} aDeck - Returns a list of 52 cards of 4 suits in a random order.
  */
 
-let shuffle = (deck) => {
-    return
+let shuffle = (aDeck) => {
+    for(let i = 0; i < aDeck.length - 1; i++) {
+        let j = i + Math.floor(Math.random() * (aDeck.length - i));
+
+        let temp = aDeck[j];
+        aDeck[j] = aDeck[i];
+        aDeck[i] = temp;
+    }
+    return aDeck;
 };
 
 /**
@@ -83,9 +99,8 @@ let dealCard = (min, max, remainingCards) => {
 };
 
 console.log( startGame(4) );
-console.log( new Card("clubs", "Four", 4) );
-console.log( Suit.suit("hearts"));
-console.log( Suit.suit("diamonds"));
-console.log( Suit.suit("clubs"));
-console.log( Suit.suit("spades"));
+let myDeck = deck();
+console.log( shuffle( myDeck ) );
+
+// console.log( shuffle(deck) );
 // console.log( dealCard(1, 12, deck) );
