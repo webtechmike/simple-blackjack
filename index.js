@@ -5,6 +5,25 @@
  */
 
 /**
+ * Store number of players in a variable to reuse later.
+ */
+let playerCount = 4;
+
+
+/**
+ * A player
+ * @constructor
+ * @param {string} name - The name of the player.
+ * @param {object} hand - The hand of the player (2 cards and their total value).
+ */
+class Player {
+    constructor(name, hand) {
+        this.name = name;
+        this.hand = hand;
+    }
+}
+
+/**
  * A card
  * @constructor
  * @param {string} suit - The suit of the card.
@@ -18,6 +37,7 @@ class Card {
         this.value = value;
     };
 }
+
 
 /**
  * Defines a suit and returns an array of 13 cards Ace through King in given suit.
@@ -48,7 +68,6 @@ class Suit {
     }
 }
 
-
 /**
  * Create the deck out of 4 suits of 13 cards each.
  */
@@ -70,9 +89,10 @@ let startGame = (numberOfPlayers) => {
     return `Playing a game of Blackjack with ${numberOfPlayers} players!`;
 };
 
+
 /**
  * Shuffle a deck of cards.
- * @param {array} aDeck - Returns a list of 52 cards of 4 suits in a random order.
+ * @param {Array} aDeck - Returns a list of 52 cards of 4 suits in a random order.
  */
 
 let shuffle = (aDeck) => {
@@ -87,20 +107,55 @@ let shuffle = (aDeck) => {
 };
 
 /**
- * Deal a card.
- * @param {number} min - Minimum value per suit (1).
- * @param {number} max - Maximum value per suit (12).
+ * Deals two random cards to each player including the dealer and returns the results.
+ * @param {Array} shuffledDeck - A shuffled deck.
+ * @param {number} numPlayers - The number of players.
  */
 
-let dealCard = (min, max, remainingCards) => {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+let dealRound = (shuffledDeck, numPlayers) => {
+    let players = [];
+    for(let i = 0; i < numPlayers; i++) {
+        players.push( new Player("random", {}) );
+    }
+
+    players.forEach((player, i) => {
+        let card1 = shuffledDeck[i];
+        let card2 = shuffledDeck[i+1];
+        player.hand = {card1: JSON.stringify(card1), card2: JSON.stringify(card2), total: card1.value + card2.value};
+    });
+    return players;
 };
 
-console.log( startGame(4) );
-let myDeck = deck();
-console.log( shuffle( myDeck ) );
+/**
+ * Get candidates from game results return players who scored 21 or less.
+ * @param {Array} results - The results of the round.
+ */
 
-// console.log( shuffle(deck) );
-// console.log( dealCard(1, 12, deck) );
+let getCandidates = (candidate) => {
+    return (candidate) => {
+        return candidate.hand.total <= 21;
+    };
+};
+
+/**
+ * Get winner(s)
+ * @param {Array} candidates - The result of getCandidates.
+ */
+
+let getWinner = (winner) => {
+    return (winner) => {
+        return Math.max(winner.hand.total);
+    };
+};
+
+console.log( startGame(playerCount) );
+let myDeck = deck();
+
+// announce the round
+let game = dealRound(shuffle( myDeck ), playerCount);
+// console.log("Game:", game);
+
+let possibleWinners = game.filter(getCandidates(game));
+
+console.log("Winner:", possibleWinners.filter(getWinner(possibleWinners)));
+// console.log( "Winner:", getWinner(game));
