@@ -131,7 +131,7 @@ let dealRound = (shuffledDeck, numPlayers) => {
  * @param {Array} results - The results of the round.
  */
 
-let getCandidates = (candidate) => {
+let getCandidates = () => {
     return (candidate) => {
         return candidate.hand.total <= 21;
     };
@@ -142,10 +142,16 @@ let getCandidates = (candidate) => {
  * @param {Array} candidates - The result of getCandidates.
  */
 
-let getWinner = (winner) => {
-    return (winner) => {
-        return Math.max(winner.hand.total);
-    };
+let getWinner = (candidates) => {
+    let topScore = Math.max.apply(Math, candidates.map((candidate) => {
+        return candidate.hand.total;
+    }));
+
+    let winner = candidates.find((candidate) => {
+        return candidate.hand.total == topScore;
+    });
+
+    return winner;
 };
 
 console.log( startGame(playerCount) );
@@ -153,9 +159,10 @@ let myDeck = deck();
 
 // announce the round
 let game = dealRound(shuffle( myDeck ), playerCount);
-// console.log("Game:", game);
 
-let possibleWinners = game.filter(getCandidates(game));
+// announce the candidates who stayed under 21
+let possibleWinners = game.filter(getCandidates());
 
-console.log("Winner:", possibleWinners.filter(getWinner(possibleWinners)));
+console.log("possibleWinners:", possibleWinners);
+console.log("Winner:", getWinner(possibleWinners));
 // console.log( "Winner:", getWinner(game));
