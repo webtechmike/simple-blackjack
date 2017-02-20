@@ -82,7 +82,7 @@ let deck = () => {
 
 /**
  * Announce starting a new game.
- * @param {number} numberOfPlayers - The number of players playing this game.
+ * @param {number} numberOfPlayers - The number of players, including the dealer, playing this game.
  */
 
 let startGame = (numberOfPlayers) => {
@@ -114,8 +114,15 @@ let shuffle = (aDeck) => {
 
 let dealRound = (shuffledDeck, numPlayers) => {
     let players = [];
-    for(let i = 0; i < numPlayers; i++) {
-        players.push( new Player("random", {}) );
+    // push dealer as new player
+    players.push(new Player("dealer", {}));
+
+    // push user as new player
+    players.push(new Player("player", {}));
+
+    // push remaining players numPlayers - 2
+    for(let i = 0; i < numPlayers - 2; i++) {
+        players.push( new Player(`random${i + 1}`, {}) );
     }
 
     players.forEach((player, i) => {
@@ -128,7 +135,6 @@ let dealRound = (shuffledDeck, numPlayers) => {
 
 /**
  * Get candidates from game results return players who scored 21 or less.
- * @param {Array} results - The results of the round.
  */
 
 let getCandidates = () => {
@@ -147,11 +153,11 @@ let getWinner = (candidates) => {
         return candidate.hand.total;
     }));
 
-    let winner = candidates.find((candidate) => {
-        return candidate.hand.total == topScore;
+    let winners = candidates.filter((candidate) => {
+        return candidate.hand.total === topScore;
     });
 
-    return winner;
+    return winners;
 };
 
 console.log( startGame(playerCount) );
@@ -162,7 +168,56 @@ let game = dealRound(shuffle( myDeck ), playerCount);
 
 // announce the candidates who stayed under 21
 let possibleWinners = game.filter(getCandidates());
+let winner = getWinner(possibleWinners);
 
-console.log("possibleWinners:", possibleWinners);
-console.log("Winner:", getWinner(possibleWinners));
-// console.log( "Winner:", getWinner(game));
+// console.log("possibleWinners:", possibleWinners);
+// console.log("Winner:", winner);
+
+/**
+ * Finds players accordingly
+ * @param {string} name - Finds the player by name.
+ */
+let findPlayer = (name) => {
+    return (player) => {
+        return player.name === name;
+    };
+};
+
+
+/**
+ * Announce the game results.
+ * @param {Array} game - The results of the game
+ */
+let announceTheGame = (game) => {
+    let dealer = game.filter(findPlayer("dealer"));
+    let player = game.filter(findPlayer("player"));
+    let random1 = game.filter(findPlayer("random1"));
+    let random2 = game.filter(findPlayer("random2"));
+
+    // console.log("your first card", typeof player[0].hand.card1, JSON.parse(player[0].hand.card1).name);
+
+    // log out player's hand
+    console.log(`Your hand: ${JSON.parse(player[0].hand.card1).name} of ${JSON.parse(player[0].hand.card1).suit}, ${JSON.parse(player[0].hand.card2).name} of ${JSON.parse(player[0].hand.card2).suit} (total = ${player[0].hand.total})`);
+
+    // log out random2's hand
+    console.log(`Player 1's hand: ${JSON.parse(random1[0].hand.card1).name} of ${JSON.parse(random1[0].hand.card1).suit}, ${JSON.parse(random1[0].hand.card2).name} of ${JSON.parse(random1[0].hand.card2).suit} (total = ${random1[0].hand.total})`);
+
+    // log out random2's hand
+    console.log(`Player 2's hand: ${JSON.parse(random2[0].hand.card1).name} of ${JSON.parse(random2[0].hand.card1).suit}, ${JSON.parse(random2[0].hand.card2).name} of ${JSON.parse(random2[0].hand.card2).suit} (total = ${random2[0].hand.total})`);
+
+    // log out dealer's hand
+    console.log(`Dealer's hand: ${JSON.parse(dealer[0].hand.card1).name} of ${JSON.parse(dealer[0].hand.card1).suit}, ${JSON.parse(dealer[0].hand.card2).name} of ${JSON.parse(dealer[0].hand.card2).suit} (total = ${dealer[0].hand.total})`);
+
+    // log out who won
+    if(winner[0].name === "player") {
+        console.log("You win!");
+    } else if (winner[0].name === "dealer") {
+        console.log("Dealer wins!");
+    } else if (winner[0].name === "random1") {
+        console.log("Player 1 wins!");
+    } else if (winner[0].name === "random2") {
+        console.log("Player 2 wins!")
+    }
+};
+
+announceTheGame(game);
