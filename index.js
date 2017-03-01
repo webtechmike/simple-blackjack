@@ -87,9 +87,9 @@ let deck = () => {
  * @param {number} numberOfPlayers - The number of players, including the dealer, playing this game.
  */
 
-let startGame = (numberOfPlayers) => {
+function startGame(numberOfPlayers) {
     return `Playing a game of Blackjack with ${numberOfPlayers} players!`;
-};
+}
 
 
 /**
@@ -97,7 +97,7 @@ let startGame = (numberOfPlayers) => {
  * @param {Array} aDeck - Returns a list of 52 cards of 4 suits in a random order.
  */
 
-let shuffle = (aDeck) => {
+function shuffle(aDeck) {
     for(let i = 0; i < aDeck.length - 1; i++) {
         let j = i + Math.floor(Math.random() * (aDeck.length - i));
 
@@ -106,7 +106,7 @@ let shuffle = (aDeck) => {
         aDeck[i] = temp;
     }
     return aDeck;
-};
+}
 
 /**
  * Deals two random cards to each player including the dealer and returns the results.
@@ -114,7 +114,7 @@ let shuffle = (aDeck) => {
  * @param {number} numPlayers - The number of players.
  */
 
-let dealRound = (shuffledDeck, numPlayers) => {
+function dealRound(shuffledDeck, numPlayers) {
     let players = [];
     // push dealer as new player
     players.push(new Player("dealer", {}));
@@ -133,24 +133,24 @@ let dealRound = (shuffledDeck, numPlayers) => {
         player.hand = {card1: JSON.stringify(card1), card2: JSON.stringify(card2), total: card1.value + card2.value};
     });
     return players;
-};
+}
 
 /**
  * Get candidates from game results return players who scored 21 or less.
  */
 
-let getCandidates = () => {
+function getCandidates() {
     return (candidate) => {
         return candidate.hand.total <= 21;
     };
-};
+}
 
 /**
  * Get winner(s)
  * @param {Array} candidates - The result of getCandidates.
  */
 
-let getWinner = (candidates) => {
+function getWinner(candidates) {
     let topScore = Math.max.apply(Math, candidates.map((candidate) => {
         return candidate.hand.total;
     }));
@@ -160,9 +160,8 @@ let getWinner = (candidates) => {
     });
 
     return winners;
-};
+}
 
-console.log( startGame(playerCount) );
 let myDeck = deck();
 
 // announce the round
@@ -179,18 +178,19 @@ let winner = getWinner(possibleWinners);
  * Finds players accordingly
  * @param {string} name - Finds the player by name.
  */
-let findPlayer = (name) => {
+function findPlayer(name) {
     return (player) => {
         return player.name === name;
     };
-};
+}
 
 
 /**
  * Announce the game results.
  * @param {Array} game - The results of the game
  */
-let announceTheGame = (game) => {
+function announceTheGame(game) {
+    console.log( startGame(playerCount) );
     let dealer = game.filter(findPlayer("dealer"));
     let player = game.filter(findPlayer("player"));
     let random1 = game.filter(findPlayer("random1"));
@@ -220,6 +220,6 @@ let announceTheGame = (game) => {
     } else if (winner[0].name === "random2") {
         console.log("Player 2 wins!")
     }
-};
+}
 
 announceTheGame(game);
