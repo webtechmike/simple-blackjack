@@ -130,7 +130,7 @@ function dealRound(shuffledDeck, numPlayers) {
     players.forEach((player, i) => {
         let card1 = shuffledDeck[i];
         let card2 = shuffledDeck[i+1];
-        player.hand = {card1: JSON.stringify(card1), card2: JSON.stringify(card2), total: card1.value + card2.value};
+        player.hand = {card1: card1, card2: card2, total: card1.value + card2.value};
     });
     return players;
 }
@@ -162,17 +162,12 @@ function getWinner(candidates) {
     return winners;
 }
 
-let myDeck = deck();
-
 // announce the round
-let game = dealRound(shuffle( myDeck ), playerCount);
+let game = dealRound(shuffle( deck() ), playerCount);
 
 // announce the candidates who stayed under 21
 let possibleWinners = game.filter(getCandidates());
 let winner = getWinner(possibleWinners);
-
-// console.log("possibleWinners:", possibleWinners);
-// console.log("Winner:", winner);
 
 /**
  * Finds players accordingly
@@ -183,7 +178,6 @@ function findPlayer(name) {
         return player.name === name;
     };
 }
-
 
 /**
  * Announce the game results.
@@ -196,19 +190,15 @@ function announceTheGame(game) {
     let random1 = game.filter(findPlayer("random1"));
     let random2 = game.filter(findPlayer("random2"));
 
-    // console.log("your first card", typeof player[0].hand.card1, JSON.parse(player[0].hand.card1).name);
-
     // log out player's hand
-    console.log(`Your hand: ${JSON.parse(player[0].hand.card1).name} of ${JSON.parse(player[0].hand.card1).suit}, ${JSON.parse(player[0].hand.card2).name} of ${JSON.parse(player[0].hand.card2).suit} (total = ${player[0].hand.total})`);
+    function showCards(greeting, player) {
+        console.log(`${greeting} hand: ${player.hand.card1.name} of ${player.hand.card1.suit}, ${player.hand.card2.name} of ${player.hand.card2.suit} (total = ${player.hand.total})`);
+    }
 
-    // log out random2's hand
-    console.log(`Player 1's hand: ${JSON.parse(random1[0].hand.card1).name} of ${JSON.parse(random1[0].hand.card1).suit}, ${JSON.parse(random1[0].hand.card2).name} of ${JSON.parse(random1[0].hand.card2).suit} (total = ${random1[0].hand.total})`);
-
-    // log out random2's hand
-    console.log(`Player 2's hand: ${JSON.parse(random2[0].hand.card1).name} of ${JSON.parse(random2[0].hand.card1).suit}, ${JSON.parse(random2[0].hand.card2).name} of ${JSON.parse(random2[0].hand.card2).suit} (total = ${random2[0].hand.total})`);
-
-    // log out dealer's hand
-    console.log(`Dealer's hand: ${JSON.parse(dealer[0].hand.card1).name} of ${JSON.parse(dealer[0].hand.card1).suit}, ${JSON.parse(dealer[0].hand.card2).name} of ${JSON.parse(dealer[0].hand.card2).suit} (total = ${dealer[0].hand.total})`);
+    showCards('Your', player[0]);
+    showCards('Player 1\'s', random1[0]);
+    showCards('Player 2\'s', random2[0]);
+    showCards('Dealer\'s', dealer[0]);
 
     // log out who won
     if(winner[0].name === "player") {
