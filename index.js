@@ -171,10 +171,9 @@ function getWinner(candidates) {
 let game = dealRound(shuffle( deck() ), playerCount);
 
 // announce the candidates who stayed under 21
-let possibleWinners = game.filter(getCandidates());
 // get top scorer of possible winners
 // @TODO: account for ties
-let winner = getWinner(possibleWinners);
+let winner = getWinner(game.filter( getCandidates() ));
 
 /**
  * Finds players accordingly
@@ -190,6 +189,7 @@ function findPlayer(name) {
 /**
  * Announce the game results.
  * @param {Array} game - The results of the game
+ * @returns logs to the console announcing the game.
  */
 function announceTheGame(game) {
     console.log( startGame(playerCount) );
@@ -210,13 +210,13 @@ function announceTheGame(game) {
 
     // log out who won
     if(winner[0].name === "player") {
-        console.log("You win!");
+        return console.log("You win!");
     } else if (winner[0].name === "dealer") {
-        console.log("Dealer wins!");
+        return console.log("Dealer wins!");
     } else if (winner[0].name === "random1") {
-        console.log("Player 1 wins!");
+        return console.log("Player 1 wins!");
     } else if (winner[0].name === "random2") {
-        console.log("Player 2 wins!")
+        return console.log("Player 2 wins!")
     }
 }
 
