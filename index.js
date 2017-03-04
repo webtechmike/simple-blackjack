@@ -73,12 +73,12 @@ class Suit {
 /**
  * Create the deck out of 4 suits of 13 cards each.
  */
-let deck = () => {
-    let newDeck = [];
-    let hearts = Suit.suit("hearts");
-    let diamonds = Suit.suit("diamonds");
-    let clubs = Suit.suit("clubs");
-    let spades = Suit.suit("spades");
+const deck = _ => {
+    const newDeck = [];
+    const hearts = Suit.suit("hearts");
+    const diamonds = Suit.suit("diamonds");
+    const clubs = Suit.suit("clubs");
+    const spades = Suit.suit("spades");
     return newDeck.concat(hearts, diamonds, clubs, spades);
 };
 
