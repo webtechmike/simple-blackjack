@@ -72,6 +72,7 @@ class Suit {
 
 /**
  * Create the deck out of 4 suits of 13 cards each.
+ * @returns a new deck.
  */
 const deck = _ => {
     const newDeck = [];
@@ -85,6 +86,7 @@ const deck = _ => {
 /**
  * Announce starting a new game.
  * @param {number} numberOfPlayers - The number of players, including the dealer, playing this game.
+ * @returns a string announcing the number of players.
  */
 
 function startGame(numberOfPlayers) {
@@ -95,6 +97,7 @@ function startGame(numberOfPlayers) {
 /**
  * Shuffle a deck of cards.
  * @param {Array} aDeck - Returns a list of 52 cards of 4 suits in a random order.
+ * @returns an array of shuffled cards.
  */
 
 function shuffle(aDeck) {
@@ -112,6 +115,7 @@ function shuffle(aDeck) {
  * Deals two random cards to each player including the dealer and returns the results.
  * @param {Array} shuffledDeck - A shuffled deck.
  * @param {number} numPlayers - The number of players.
+ * @returns an array of players.
  */
 
 function dealRound(shuffledDeck, numPlayers) {
@@ -137,6 +141,7 @@ function dealRound(shuffledDeck, numPlayers) {
 
 /**
  * Get candidates from game results return players who scored 21 or less.
+ * @returns a function that returns all players who haven't busted.
  */
 
 function getCandidates() {
@@ -172,6 +177,7 @@ let winner = getWinner(possibleWinners);
 /**
  * Finds players accordingly
  * @param {string} name - Finds the player by name.
+ * @returns a function that returns a player with the given name.
  */
 function findPlayer(name) {
     return player => {
