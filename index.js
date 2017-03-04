@@ -140,7 +140,7 @@ function dealRound(shuffledDeck, numPlayers) {
  */
 
 function getCandidates() {
-    return (candidate) => {
+    return candidate => {
         return candidate.hand.total <= 21;
     };
 }
@@ -151,11 +151,11 @@ function getCandidates() {
  */
 
 function getWinner(candidates) {
-    let topScore = Math.max.apply(Math, candidates.map((candidate) => {
+    let topScore = Math.max.apply(Math, candidates.map(candidate => {
         return candidate.hand.total;
     }));
 
-    let winners = candidates.filter((candidate) => {
+    let winners = candidates.filter(candidate => {
         return candidate.hand.total === topScore;
     });
 
@@ -174,7 +174,7 @@ let winner = getWinner(possibleWinners);
  * @param {string} name - Finds the player by name.
  */
 function findPlayer(name) {
-    return (player) => {
+    return player => {
         return player.name === name;
     };
 }
