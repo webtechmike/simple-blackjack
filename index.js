@@ -134,7 +134,7 @@ function dealRound(shuffledDeck, numPlayers) {
     players.forEach((player, i) => {
         let card1 = shuffledDeck[i];
         let card2 = shuffledDeck[i+1];
-        player.hand = {card1: card1, card2: card2, total: card1.value + card2.value};
+        player.hand = {card1, card2, total: card1.value + card2.value};
     });
     return players;
 }
@@ -172,6 +172,8 @@ let game = dealRound(shuffle( deck() ), playerCount);
 
 // announce the candidates who stayed under 21
 let possibleWinners = game.filter(getCandidates());
+// get top scorer of possible winners
+// @TODO: account for ties
 let winner = getWinner(possibleWinners);
 
 /**
