@@ -153,6 +153,7 @@ function getCandidates() {
 /**
  * Get winner(s)
  * @param {Array} candidates - The result of getCandidates.
+ * @returns a list of winners.
  */
 
 function getWinner(candidates) {
@@ -160,8 +161,11 @@ function getWinner(candidates) {
         return candidate.hand.total;
     }));
 
-    let winners = candidates.filter(candidate => {
-        return candidate.hand.total === topScore;
+    let winners = [];
+    candidates.forEach(candidate => {
+        if(candidate.hand.total === topScore) {
+            winners.push(candidate);
+        }
     });
 
     return winners;
@@ -209,7 +213,12 @@ function announceTheGame(game) {
     showCards('Dealer\'s', dealer[0]);
 
     // log out who won
-    if(winner[0].name === "player") {
+    let multipleWinners = winner.length >= 2;
+    if (multipleWinners) {
+        return winner.forEach(winnee => {
+            console.log(`${winnee.name} tied!`);
+        });
+    } else if(winner[0].name === "player") {
         return console.log("You win!");
     } else if (winner[0].name === "dealer") {
         return console.log("Dealer wins!");
